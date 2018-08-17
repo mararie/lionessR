@@ -102,7 +102,7 @@ bincol <- mypalette4[bincol]
 # add colors to nodes
 V(g)$color <- bincol
 
-## ---- echo=FALSE, dpi=70, fig.width=10, fig.height=10--------------------
+## ---- dpi=70, fig.width=10, fig.height=10--------------------------------
 par(mar=c(0,0,0,0))
 plot(g, vertex.label.cex=0.7, vertex.size=10, vertex.label.color = "black", vertex.label.font=3, edge.width=10*(abs(as.numeric(z[,3]))-0.7), vertex.color=V(g)$color)
 
