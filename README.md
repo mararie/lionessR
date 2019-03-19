@@ -14,7 +14,7 @@ And then load the package using: ```library(lionessR)```.
 Below we describe an example of co-expression network analysis using lionessR. This code is also available in the lionessR vignette.
 
 ## Example: single-sample co-expression network analysis in osteosarcoma
-As an example of how to model single-sample networks using lionessR, we will reconstruct and analyze co-expression networks for individual osteosarcoma patients. Osteosarcoma is an aggressive primary bone tumor that has a peak incidence in adolescents and young adults. The leading cause of death of osteosarcoma is distant metastases, which develop in 45% of patients. Detection of differential co-expression between osteosarcoma biopsies of patients with short and long metastasis-free survival may help better understand metastasis development, and may point to targets for treatment.
+As an example of how to model single-sample networks using lionessR, we will reconstruct and analyze co-expression networks for individual osteosarcoma patients. Osteosarcoma is an aggressive primary bone tumor that has a peak incidence in adolescents and young adults. The leading cause of death of osteosarcoma is distant metastases, which develop in 45% of patients. Detection of differential co-expression between osteosarcoma biopsies of patients with short and long metastasis-free survival (MFS) may help better understand metastasis development, and may point to targets for treatment.
 
 Our example dataset contains gene expression data for pre-treatment biopsies of two groups of patients—one group contains 19 patients who did not develop any metastases within 5 years after diagnosis of the primary tumor (long-term metastasis-free survivors), the other group contains 34 patients who did developed metastases within 5 years (short-term metastasis-free survivors).
 
@@ -39,7 +39,7 @@ dat <- dat[order(dat[,1], decreasing=T),]
 dat <- dat[1:nsel, -1]
 dat <- as.matrix(dat)
 ```
-Next, we will make two condition-specific networks, one for the short-term and one for the long-term metastasis-free survival group. We calculate the difference between these condition-specific network adjacency matrices, so that we can use this to select edges that have large absolute differences in their co-expression levels:
+Next, we will make two condition-specific networks, one for the short-term and one for the long-term MFS group. We calculate the difference between these condition-specific network adjacency matrices, so that we can use this to select edges that have large absolute differences in their co-expression levels:
 ```
 groupyes <- which(targets$mets=="yes")
 groupno <- which(targets$mets=="no")
@@ -80,7 +80,7 @@ fit2 <- contrasts.fit(fit, cont.matrix)
 fit2e <- eBayes(fit2)
 toptable <- topTable(fit2e, number=nrow(corsub), adjust="fdr")
 ```
-We select the top 50 most differentially co-expressed edges and convert them into an igraph graph.data.frame object for visualization. We color edges red if they have higher coefficients in the short-term metastasis-free survival group, and blue if they have higher coefficients in the long-term metastasis-free survival group:
+We select the top 50 most differentially co-expressed edges and convert them into an igraph graph.data.frame object for visualization. We color edges red if they have higher coefficients in the short-term MFS group, and blue if they have higher coefficients in the long-term MFS group:
 ```
 toptable_edges <- t(matrix(unlist(c(strsplit(row.names(toptable), "_"))),2))
 z <- cbind(toptable_edges[1:50,], toptable$logFC[1:50])
@@ -126,8 +126,12 @@ bincol <- mypalette4[bincol]
 # add colors to nodes
 V(g)$color <- bincol
 ```
-Finally, we visualize these results in a network diagram:
+Finally, we visualize these results in a network diagram of the 50 most significant edges from the LIMMA analysis:
 ```
 par(mar=c(0,0,0,0))
 plot(g, vertex.label.cex=0.7, vertex.size=10, vertex.label.color = "black", vertex.label.font=3, edge.width=10*(abs(as.numeric(z[,3]))-0.7), vertex.color=V(g)$color)
 ```
+This will return the following image:
+![index](https://user-images.githubusercontent.com/5340797/54590837-426c0200-4a29-11e9-9229-717dff5c94c3.png)
+
+Here, edges are colored based on whether they have higher weights in patients with poor (red) or better (blue) MFS. Thicker edges represent higher log fold changes. Nodes (genes) are colored based on the t-statistic from the differential expression analysis. Nodes with absolute t-statistic < 1.5 are shown in white, nodes in red/blue have higher expression in patients with poor/better MFS, respectively.
