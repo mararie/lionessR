@@ -1,7 +1,7 @@
 # lionessR
 ## Package for single sample network reconstruction in R
 
-LIONESS, or **L**inear **I**nterpolation to **O**btain **N**etwork **E**stimates for **S**ingle **S**amples, can be used to reconstruct single-sample networks (http://arxiv.org/pdf/1505.06440.pdf). This package implements the LIONESS equation in R to reconstruct single-sample networks. The default network reconstruction method we use here is based on Pearson correlation. However, lionessR can run on any network reconstruction algorithms that returns a complete, weighted adjacency matrix. lionessR works for both unipartite and bipartite networks.
+LIONESS, or **L**inear **I**nterpolation to **O**btain **N**etwork **E**stimates for **S**ingle **S**amples, can be used to reconstruct single-sample networks (http://arxiv.org/pdf/1505.06440.pdf). This package implements the LIONESS equation in R to reconstruct single-sample networks. The default network reconstruction method we use here is based on Pearson correlation. However, lionessR can run on any network reconstruction algorithm that returns a complete, weighted adjacency matrix. To run the function on other network reconstruction algorithms, the user should substitute the function ```netFun``` with their network reconstruction algorithm of choice. lionessR works for both unipartite and bipartite networks and returns an R data frame that includes weights for all edges in each of the sample-specific networks.
 
 The easiest way to install the R package lionessR is via the devtools package from CRAN:
 ```
