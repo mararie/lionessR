@@ -132,6 +132,6 @@ par(mar=c(0,0,0,0))
 plot(g, vertex.label.cex=0.7, vertex.size=10, vertex.label.color = "black", vertex.label.font=3, edge.width=10*(abs(as.numeric(z[,3]))-0.7), vertex.color=V(g)$color)
 ```
 This will return the following image:
-![index](https://user-images.githubusercontent.com/5340797/54590837-426c0200-4a29-11e9-9229-717dff5c94c3.png)
+![osfig](https://user-images.githubusercontent.com/5340797/54591309-43e9fa00-4a2a-11e9-9b58-da43ce450bbf.png)
 
 Here, edges are colored based on whether they have higher weights in patients with poor (red) or better (blue) MFS. Thicker edges represent higher log fold changes. Nodes (genes) are colored based on the t-statistic from the differential expression analysis. Nodes with absolute t-statistic < 1.5 are shown in white, nodes in red/blue have higher expression in patients with poor/better MFS, respectively.
