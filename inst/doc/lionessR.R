@@ -4,7 +4,7 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
-## ----message=F-----------------------------------------------------------
+## ----message=FALSE-----------------------------------------------------------
 library(devtools)
 library(lionessR)
 library(igraph)
@@ -18,7 +18,7 @@ data(OSdata)
 nsel=500
 cvar <- apply(as.array(as.matrix(exp)), 1, sd)
 dat <- cbind(cvar, exp)
-dat <- dat[order(dat[,1], decreasing=T),]
+dat <- dat[order(dat[,1], decreasing=TRUE),]
 dat <- dat[1:nsel, -1]
 dat <- as.matrix(dat)
 
@@ -62,7 +62,7 @@ toptable <- topTable(fit2e, number=nrow(corsub), adjust="fdr")
 ## ------------------------------------------------------------------------
 toptable_edges <- t(matrix(unlist(c(strsplit(row.names(toptable), "_"))),2))
 z <- cbind(toptable_edges[1:50,], toptable$logFC[1:50])
-g <- graph.data.frame(z, directed=F)
+g <- graph.data.frame(z, directed=FALSE)
 E(g)$weight <- as.numeric(z[,3])
 E(g)$color[E(g)$weight<0] <- "blue"
 E(g)$color[E(g)$weight>0] <- "red"

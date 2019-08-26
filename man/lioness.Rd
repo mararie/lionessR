@@ -4,7 +4,7 @@
 \alias{lioness}
 \title{LIONESS}
 \usage{
-lioness(x, f = netFun, ...)
+lioness(x, f = netFun)
 }
 \arguments{
 \item{x}{Numeric matrix with samples in columns.}
@@ -13,6 +13,9 @@ lioness(x, f = netFun, ...)
 }
 \description{
 This function uses the LIONESS equation to estimate single-sample networks.
+}
+\value{
+Dataframe of single-sample association network.
 }
 \examples{
 exp <- matrix(sample(1000,1000)/1000, 100, 10)

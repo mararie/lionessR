@@ -4,15 +4,15 @@ author: "Marieke L. Kuijjer"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{lionessR}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+    %\VignetteIndexEntry{lionessR}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
+    collapse = TRUE,
+    comment = "#>"
 )
 ```
 
@@ -26,8 +26,7 @@ Our example dataset contains gene expression data for pre-treatment biopsies of 
 
 For this analysis, we need to load the following packages:
 
-```{r message=F}
-library(devtools)
+```{r message=FALSE}
 library(lionessR)
 library(igraph)
 library(reshape2)
@@ -46,7 +45,7 @@ This dataset contains an object `exp` with expression data for these 53 patients
 nsel=500
 cvar <- apply(as.array(as.matrix(exp)), 1, sd)
 dat <- cbind(cvar, exp)
-dat <- dat[order(dat[,1], decreasing=T),]
+dat <- dat[order(dat[,1], decreasing=TRUE),]
 dat <- dat[1:nsel, -1]
 dat <- as.matrix(dat)
 ```
@@ -105,7 +104,7 @@ We select the top 50 most differentially co-expressed edges and convert them int
 ```{r}
 toptable_edges <- t(matrix(unlist(c(strsplit(row.names(toptable), "_"))),2))
 z <- cbind(toptable_edges[1:50,], toptable$logFC[1:50])
-g <- graph.data.frame(z, directed=F)
+g <- graph.data.frame(z, directed=FALSE)
 E(g)$weight <- as.numeric(z[,3])
 E(g)$color[E(g)$weight<0] <- "blue"
 E(g)$color[E(g)$weight>0] <- "red"
@@ -144,17 +143,22 @@ breaks4 <- c(breaks2a,breaks2b)
 # select bins for colors
 bincol <- rep(NA, length(V(g)))
 for(i in 1:length(V(g))){
-	bincol[i] <- min(which(breaks4>V(g)$weight[i]))
+    bincol[i] <- min(which(breaks4>V(g)$weight[i]))
 }
 bincol <- mypalette4[bincol]
-	
+
 # add colors to nodes
 V(g)$color <- bincol
 ```
-	
+
 Finally, we visualize these results in a network diagram:
 
 ```{r, dpi=70, fig.width=10, fig.height=10}
 par(mar=c(0,0,0,0))
 plot(g, vertex.label.cex=0.7, vertex.size=10, vertex.label.color = "black", vertex.label.font=3, edge.width=10*(abs(as.numeric(z[,3]))-0.7), vertex.color=V(g)$color)
+```
+
+## Session Info
+```{r session-info}
+sessionInfo()
 ```

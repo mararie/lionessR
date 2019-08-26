@@ -1,17 +1,28 @@
 Package: lionessR
 Title: Modeling networks for individual samples using LIONESS
-Version: 1.0
-Author: Marieke Lydia Kuijjer
-Maintainer: Marieke Lydia Kuijjer <marieke.kuijjer@ncmm.uio.no>
+Version: 0.99.0
 Description: LIONESS, or Linear Interpolation to Obtain Network Estimates for Single Samples, can be used to reconstruct single-sample networks (https://arxiv.org/abs/1505.06440). This code implements the LIONESS equation in the lioness function in R to reconstruct single-sample networks. The default network reconstruction method we use is based on Pearson correlation. However, lionessR can run on any network reconstruction algorithms that returns a complete, weighted adjacency matrix. lionessR works for both unipartite and bipartite networks.
-Depends:
-    R (>= 3.0.2)
-Imports: 
-    stats
-License: MIT
-Encoding: UTF-8
-LazyData: true
-RoxygenNote: 6.0.1
+Authors@R: c(person(c("Marieke", "Lydia"), "Kuijjer", 
+                    role = c("aut"), 
+                    email = "marieke.kuijjer@ncmm.uio.no", 
+                    comment = c(ORCID = "0000-0001-6280-3130")),
+             person("Ping-Han", "Hsieh",
+                    role = c("cre"),
+                    email = "p.h.hsieh@ncmm.uio.no",
+                    comment = c(ORCID = "0000-0003-3054-1409")))
+License: MIT + file LICENSE
+LazyData: TRUE
+Imports: stats
+Depends: R (>= 3.6.0)
 Suggests: knitr,
-    rmarkdown
+          rmarkdown,
+          igraph,
+          reshape2,
+          limma,
+biocViews: Network,
+           NetworkInference
+BugReports: https://github.com/mararie/lionessR/issues
+URL: https://github.com/mararie/lionessR
+Encoding: UTF-8
+RoxygenNote: 6.0.1
 VignetteBuilder: knitr

@@ -1,0 +1,9 @@
+bibentry(bibtype = "Unpublished",
+         author = c(person(c("Marieke", "Lydia"), "Kuijjer"),
+                    person("John", "Quackenbush"),              
+                    person("Kimberly", "Glass")),
+         title = "lionessR: single-sample network reconstruction in R",
+         year = "2019",
+         doi = "10.1101/582098",
+         note = "published on bioRxiv preprint server",
+         url = "https://www.biorxiv.org/content/10.1101/582098v1")

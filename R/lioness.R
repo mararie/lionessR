@@ -11,30 +11,32 @@
 #' row.names(exp) <- paste("gene", c(1:nrow(exp)), sep="_")
 #' lionessResults <- lioness(exp, netFun)
 
-lioness <- function(x, f=netFun, ...){
- 
-  if(!is.function(f)){ stop("please use a function") }
-  if(!is.matrix(x)) { print("please use a numeric matrix as input") }
+lioness <- function(x, f=netFun){
+
+    if(!is.function(f)){ stop("please use a function") }
+    if(!is.matrix(x)) { print("please use a numeric matrix as input") }
     
-  nrsamples <- ncol(x)
-  samples <- colnames(x)
+    nrsamples <- ncol(x)
+    samples <- colnames(x)
 
-  # this applies netFun and extracts the aggregate network
-  net <- netFun(x)
-  agg <- c(net)
+    # this applies netFun and extracts the aggregate network
+    net <- netFun(x)
+    agg <- c(net)
 
-  # prepare the lioness output
-  lionessOutput <- matrix(NA, nrow(net)*ncol(net), nrsamples+2)
-  colnames(lionessOutput) <- c("reg", "tar", samples)
-  lionessOutput[,1] <- rep(row.names(net), ncol(net))
-  lionessOutput[,2] <- rep(colnames(net), each=nrow(net))
-  lionessOutput <- as.data.frame(lionessOutput, stringsAsFactors=F)
-  lionessOutput[,3:ncol(lionessOutput)] <- sapply(lionessOutput[,3:ncol(lionessOutput)], as.numeric)
+    # prepare the lioness output
+    lionessOutput <- matrix(NA, nrow(net)*ncol(net), nrsamples+2)
+    colnames(lionessOutput) <- c("reg", "tar", samples)
+    lionessOutput[,1] <- rep(row.names(net), ncol(net))
+    lionessOutput[,2] <- rep(colnames(net), each=nrow(net))
+    lionessOutput <- as.data.frame(lionessOutput, stringsAsFactors=FALSE)
+    lionessOutput[,3:ncol(lionessOutput)] <- vapply(lionessOutput[, 3:ncol(lionessOutput)], 
+                                                    as.numeric, 
+                                                    vector('numeric', nrow(lionessOutput)))
 
-  # run function f and the LIONESS equation
-  for(i in 1:nrsamples){
-    ss <- c(f(x[,-i])) # apply netFun on all samples minus one
-    lionessOutput[,i+2] <- nrsamples*(agg-ss)+ss # apply LIONESS equation
-  }
-  return(lionessOutput)  
+    # run function f and the LIONESS equation
+    for(i in seq_len(nrsamples)){
+        ss <- c(f(x[,-i])) # apply netFun on all samples minus one
+        lionessOutput[,i+2] <- nrsamples*(agg-ss)+ss # apply LIONESS equation
+    }
+    return(lionessOutput)  
 }

@@ -8,6 +8,6 @@
 #' netFun()
 
 
-netFun <- function(x, ...) {
-  stats::cor(t(x), method="pearson") 
+netFun <- function(x) {
+    stats::cor(t(x), method="pearson") 
 }

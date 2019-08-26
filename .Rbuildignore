@@ -1,0 +1,4 @@
+./.git
+./.git/*
+./lionessR.Rproj
+./data/OSdata.RData.bak

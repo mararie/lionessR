@@ -4,7 +4,7 @@
 \alias{netFun}
 \title{netFun}
 \usage{
-netFun(x, ...)
+netFun(x)
 }
 \arguments{
 \item{x}{Numeric matrix with samples in columns.}
@@ -12,7 +12,11 @@ netFun(x, ...)
 \description{
 This is the network reconstruction function that will be used to build aggregate networks.
 }
+\value{
+Numeric matrix of association network. 
+}
 \examples{
-netFun()
+exp <- matrix(sample(1000, 1000)/1000, 100, 10)
+netFun(exp)
 }
 \keyword{netFun}
