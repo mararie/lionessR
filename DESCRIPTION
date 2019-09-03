@@ -8,7 +8,7 @@ Authors@R: c(person(c("Marieke", "Lydia"), "Kuijjer",
                     comment = c(ORCID = "0000-0001-6280-3130")),
              person("Ping-Han", "Hsieh",
                     role = c("cre"),
-                    email = "p.h.hsieh@ncmm.uio.no",
+                    email = "dn070017@gmail.com",
                     comment = c(ORCID = "0000-0003-3054-1409")))
 License: MIT + file LICENSE
 LazyData: TRUE
@@ -20,7 +20,8 @@ Suggests: knitr,
           reshape2,
           limma,
 biocViews: Network,
-           NetworkInference
+           NetworkInference,
+           GeneExpression
 BugReports: https://github.com/mararie/lionessR/issues
 URL: https://github.com/mararie/lionessR
 Encoding: UTF-8

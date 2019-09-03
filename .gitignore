@@ -1,2 +1,8 @@
-lionessR.Rproj
-vignettes/.Rhistory
+./.git
+./.git/*
+./.Rhistory
+./man/.Rhistory
+./vignettes/.Rhistory
+./lionessR.Rproj
+./data/OSdata.RData.bak
+./inst/doc/lionessR.*

@@ -11,6 +11,6 @@
 data(OSdata)
 }
 \description{
-Pre-processed gene expression data from high-grade osteosarcoma biopsies and sample characteristics were downloaded from GEO (GSE42352). We converted nuIDs to gene symbols using the annotation platform GPL10295. For genes with duplicate gene symbols, we selected the gene with the highest variance. Finally, we subsetted the data to the 53 patients for which 5 year metastasis information was available, and we extracted 10000 genes randomly for the analysis.
+Pre-processed gene expression data from high-grade osteosarcoma biopsies and sample characteristics were downloaded from GEO (GSE42352). We converted nuIDs to gene symbols using the annotation platform GPL10295. For genes with duplicate gene symbols, we selected the gene with the highest variance. Finally, we subsetted the data to the 53 patients for which 5 year metastasis information was available. Finally, we extracted genes with top 10,000 variance to reduce the size of the dataset.
 }
 \keyword{datasets}
