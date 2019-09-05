@@ -3,6 +3,7 @@
 #' This function uses the LIONESS equation to estimate single-sample networks.
 #' @param x Numeric matrix with samples in columns.
 #' @param f Network reconstruction function. Defaults to Pearson correlation.
+#' @param assay Specified the assay used in lionessR for SummerizedExperiment object. Default: counts. 
 #' @keywords lioness
 #' @export
 #' @examples
@@ -11,10 +12,17 @@
 #' row.names(exp) <- paste("gene", c(1:nrow(exp)), sep="_")
 #' lionessResults <- lioness(exp, netFun)
 
-lioness <- function(x, f=netFun){
+lioness <- function(x, f=netFun, assay='counts'){
 
+    is.se <- inherits(x, "SummarizedExperiment")
+    is.matrix <- is.matrix(x)
+    
     if(!is.function(f)){ stop("please use a function") }
-    if(!is.matrix(x)) { print("please use a numeric matrix as input") }
+    if(is.matrix(x)) { print("take numeric matrix as input, ignore parameter for assay")}
+    if(is.se) { x <- SummarizedExperiment::assays(x)[[assay]] }
+    if(!is.matrix(x)) { print("please use a numeric matrix as input")}
+        
+    if(is.null(colnames(x))){ colnames(x) = seq_len(ncol(x)) }
     
     nrsamples <- ncol(x)
     samples <- colnames(x)

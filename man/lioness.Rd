@@ -4,12 +4,13 @@
 \alias{lioness}
 \title{LIONESS}
 \usage{
-lioness(x, f = netFun)
+lioness(x, f = netFun, assay = 'counts')
 }
 \arguments{
-\item{x}{Numeric matrix with samples in columns.}
+\item{x}{Numeric matrix with samples in columns or SummerizedExperiment object}
 
 \item{f}{Network reconstruction function. Defaults to Pearson correlation.}
+\item{assay}{Specified the assay used in lionessR for SummerizedExperiment object. Default: counts}
 }
 \description{
 This function uses the LIONESS equation to estimate single-sample networks.

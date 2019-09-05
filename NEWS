@@ -1,2 +1,6 @@
 Change in version 0.99.0 (2019-08-19)
 + Submitted to Bioconductor
+
+Change in version 0.99.1 (2019-09-05)
++ Bug fixed for matrix without column names
++ Accept SummarizedExperiment object as input
