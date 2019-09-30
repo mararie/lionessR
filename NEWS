@@ -4,3 +4,9 @@ Change in version 0.99.0 (2019-08-19)
 Change in version 0.99.1 (2019-09-05)
 + Bug fixed for matrix without column names
 + Accept SummarizedExperiment object as input
+
+Change in version 0.99.2 (2019-09-30)
++ Modify behaviour when SummarizedExperiment object used as input
++ Use SummarizedExperiment object in vignettes
++ Add description for the vignettes figure
++ Change examples in manual for lioness function

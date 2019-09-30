@@ -12,14 +12,17 @@
 #' row.names(exp) <- paste("gene", c(1:nrow(exp)), sep="_")
 #' lionessResults <- lioness(exp, netFun)
 
-lioness <- function(x, f=netFun, assay='counts'){
+lioness <- function(x, f=netFun){
 
     is.se <- inherits(x, "SummarizedExperiment")
     is.matrix <- is.matrix(x)
     
     if(!is.function(f)){ stop("please use a function") }
     if(is.matrix(x)) { print("take numeric matrix as input, ignore parameter for assay")}
-    if(is.se) { x <- SummarizedExperiment::assays(x)[[assay]] }
+    if(is.se) {
+        colData <- SummarizedExperiment::colData(x) 
+        x <- SummarizedExperiment::assay(x) 
+    }
     if(!is.matrix(x)) { print("please use a numeric matrix as input")}
         
     if(is.null(colnames(x))){ colnames(x) = seq_len(ncol(x)) }
@@ -46,5 +49,17 @@ lioness <- function(x, f=netFun, assay='counts'){
         ss <- c(f(x[,-i])) # apply netFun on all samples minus one
         lionessOutput[,i+2] <- nrsamples*(agg-ss)+ss # apply LIONESS equation
     }
-    return(lionessOutput)  
+
+    edges <- paste(lionessOutput[, 1], lionessOutput[, 2], sep = "_")
+    nodes <- colnames(x)
+    
+    rowData <- S4Vectors::DataFrame(row.names = edges, reg = lionessOutput[, 1], tar = lionessOutput[, 2])
+    if(!is.se){
+        colData <- S4Vectors::DataFrame(row.names = nodes, sample = nodes)
+    }
+
+    se <- SummarizedExperiment::SummarizedExperiment(assays = list(lioness = as.matrix(lionessOutput[, 3:ncol(lionessOutput)])),
+                                                     colData = colData, rowData = rowData)
+
+    return(se)  
 }

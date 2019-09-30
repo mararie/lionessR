@@ -4,24 +4,29 @@
 \alias{lioness}
 \title{LIONESS}
 \usage{
-lioness(x, f = netFun, assay = 'counts')
+lioness(x, f = netFun)
 }
 \arguments{
 \item{x}{Numeric matrix with samples in columns or SummerizedExperiment object}
-
 \item{f}{Network reconstruction function. Defaults to Pearson correlation.}
-\item{assay}{Specified the assay used in lionessR for SummerizedExperiment object. Default: counts}
 }
 \description{
-This function uses the LIONESS equation to estimate single-sample networks.
+This function uses the LIONESS equation to estimate single-sample networks. The input supports numeric matrix or a SummerizedExperiment object.
 }
 \value{
-Dataframe of single-sample association network.
+SummerizedExperiment object for single-sample association network. The rowData contains the information about the regulators and their targets, while the colData contains the information about the samples. The edge weights of sample specific networks can be accessed through the lioness assay of the object.
 }
 \examples{
 exp <- matrix(sample(1000,1000)/1000, 100, 10)
-colnames(exp) <- paste("sample", c(1:ncol(exp)), sep="_")
-row.names(exp) <- paste("gene", c(1:nrow(exp)), sep="_")
-lionessResults <- lioness(exp, netFun)
+genes <- paste("gene", c(1:nrow(exp)), sep="_")
+samples <- paste("sample", c(1:ncol(exp)), sep="_")
+
+rowData <- S4Vectors::DataFrame(row.names = genes, gene = genes)
+colData <- S4Vectors::DataFrame(col.names = samples, sample = samples)
+
+se <- SummarizedExperiment::SummarizedExperiment(assays = list(counts = exp), 
+                                                 colData = colData, rowData = rowData)
+
+lionessResults <- lioness(se, netFun)
 }
 \keyword{lioness}

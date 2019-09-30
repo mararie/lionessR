@@ -31,32 +31,33 @@ library(lionessR)
 library(igraph)
 library(reshape2)
 library(limma)
+library(SummarizedExperiment)
 ```
 
-To start, we load the dataset in R:
+To start, we load the dataset in R. This dataset contains an object `exp` with expression data for these 53 patients and an object `targets` with information on which patients developed metastases within 5 years. We then construct a SummerizedExperiment object:
 
 ```{r}
 data(OSdata)
+rowData <- DataFrame(row.names = rownames(exp), gene = rownames(exp))
+colData <- DataFrame(row.names = targets$sample, sample = as.character(targets$sample), mets = targets$mets)
+
+se <- SummarizedExperiment(assays = list(counts = as.matrix(exp)), 
+                           colData = colData, rowData = rowData)
 ```
 
-This dataset contains an object `exp` with expression data for these 53 patients and an object `targets` with information on which patients developed metastases within 5 years. Because co-expression networks are usually very large, we subset this dataset to the 500 most variably expressed genes. To do this, we will sort the dataset based on the standard deviation of expression levels of each gene, and will select the top 500 genes:
+Because co-expression networks are usually very large, we subset this dataset to the 500 most variably expressed genes. To do this, we will sort the dataset based on the standard deviation of expression levels of each gene, and will select the top 500 genes:
 
 ```{r}
 nsel=500
-cvar <- apply(as.array(as.matrix(exp)), 1, sd)
-dat <- cbind(cvar, exp)
-dat <- dat[order(dat[,1], decreasing=TRUE),]
-dat <- dat[1:nsel, -1]
-dat <- as.matrix(dat)
+cvar <- apply(assay(se), 1, sd)
+dat <- se[tail(order(cvar), 500), ]
 ```
 
 Next, we will make two condition-specific networks, one for the short-term and one for the long-term metastasis-free survival group. We calculate the difference between these condition-specific network adjacency matrices, so that we can use this to select edges that have large absolute differences in their co-expression levels:
 
 ```{r}
-groupyes <- which(targets$mets=="yes")
-groupno <- which(targets$mets=="no")
-netyes <- cor(t(dat[,groupyes]))
-netno <- cor(t(dat[,groupno]))
+netyes <- cor(t(assay(dat)[, dat$mets == "yes"]))
+netno  <- cor(t(assay(dat)[, dat$mets == "no"]))
 netdiff <- netyes-netno
 ```
 
@@ -82,15 +83,13 @@ Next, we'll model the single-sample networks based on co-expression using liones
 
 ```{r}
 cormat <- lioness(dat, netFun)
-row.names(cormat) <- paste(cormat[,1], cormat[,2], sep="_")
-corsub <- cormat[which(row.names(cormat) %in% tosel),3:ncol(cormat)]
-corsub <- as.matrix(corsub)
+corsub <- assay(cormat[which(row.names(cormat) %in% tosel), ])
 ```
 
 We then run a LIMMA analysis on these edges:
 
 ```{r}
-group <- factor(targets[,2])
+group <- factor(se$mets)
 design <- model.matrix(~0+group)
 cont.matrix <- makeContrasts(yesvsno = (groupyes - groupno), levels = design)  
 fit <- lmFit(corsub, design)
@@ -151,7 +150,7 @@ bincol <- mypalette4[bincol]
 V(g)$color <- bincol
 ```
 
-Finally, we visualize these results in a network diagram:
+Finally, we visualize these results in a network diagram. In this diagram, edges are colored based on whether they have higher weights in patients with poor (red) or better (blue) MFS. Thicker edges represent higher fold changes. Nodes (genes) are colored based on the t-statistic from a differential expression analysis. Nodes with absolute t-statistic < 1.5 are shown in white, nodes in red/blue have higher expression in patients with poor/better MFS, respectively. The target genes we identified that connect to STAT1 were enriched for being annotated to the Gene Ontology term ossification. More importantly, STAT1 is a transcription factor in the interferon signaling pathway—a pathway known to be involved in osteosarcoma.
 
 ```{r, dpi=70, fig.width=10, fig.height=10}
 par(mar=c(0,0,0,0))
