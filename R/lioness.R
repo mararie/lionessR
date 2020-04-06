@@ -20,7 +20,7 @@ lioness <- function(x, f=netFun, ...){
   samples <- colnames(x)
 
   # this applies netFun and extracts the aggregate network
-  net <- netFun(x)
+  net <- f(x)
   agg <- c(net)
 
   # prepare the lioness output
