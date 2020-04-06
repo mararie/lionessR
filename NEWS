@@ -10,3 +10,6 @@ Change in version 0.99.2 (2019-09-30)
 + Use SummarizedExperiment object in vignettes
 + Add description for the vignettes figure
 + Change examples in manual for lioness function
+
+Change in version 1.0.1 (2020-04-06)
++ Fixed bug: custom function in aggregate network
